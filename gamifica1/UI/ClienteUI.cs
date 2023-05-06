@@ -10,13 +10,8 @@ namespace gamifica.UI
     public class ClienteUI
     {
         private List<Cliente> clientes = new List<Cliente>();
-        public void RegistrarCliente(string nome, string sobrenome, string endereco, string telefone)
+        public void RegistrarCliente(Cliente cliente)
         {
-            Cliente cliente = new Cliente();
-            cliente.Nome = nome;
-            cliente.Sobrenome = sobrenome;
-            cliente.Endereco = endereco;
-            cliente.Telefone = telefone;
             clientes.Add(cliente);
             // Salvar o cliente no banco de dados ou em um arquivo
         }

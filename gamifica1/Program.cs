@@ -1,9 +1,19 @@
-﻿using gamifica.Models;
+﻿using gamifica.inicializaBanco;
+using gamifica.Models;
 using gamifica.UI;
 CategoriaUI categoriaUI = new CategoriaUI();
 ClienteUI clienteUI = new ClienteUI();
 VendaUI vendaUI = new VendaUI();
 ProdutoUI produtoUI = new ProdutoUI();
+
+
+InicializaBanco inicializador = new InicializaBanco(categoriaUI, produtoUI, vendaUI, clienteUI);
+inicializador.ExecutaInicializacao();
+
+
+int idProduto;
+int idCliente;
+
 bool sair = false;
 while (!sair)
 {
@@ -36,25 +46,32 @@ while (!sair)
                 switch (opcaoCategoria)
                 {
                     case 1:
-                        Console.Write("Digite o id: ");
-                        int idcategoria = int.Parse(Console.ReadLine());
-
-                        Console.Write("Digite o nome da categoria: ");
-                        string nomeCategoria = Console.ReadLine();
-
-                        Console.Write("Digite a descrição da categoria: ");
-                        string descricaoCategoria = Console.ReadLine();
-
-                        Categoria novaCategoria = new Categoria
+                        try
                         {
-                            IdCategoria = idcategoria,
-                            Nome = nomeCategoria,
-                            Descricao = descricaoCategoria
-                        };
+                            Console.Write("Digite o id: ");
+                            int idcategoria = int.Parse(Console.ReadLine());
 
-                        categoriaUI.RegistrarCategoria(novaCategoria);
+                            Console.Write("Digite o nome da categoria: ");
+                            string nomeCategoria = Console.ReadLine();
 
-                        Console.WriteLine("Categoria registrada com sucesso!");
+                            Console.Write("Digite a descrição da categoria: ");
+                            string descricaoCategoria = Console.ReadLine();
+
+                            Categoria novaCategoria = new Categoria
+                            {
+                                IdCategoria = idcategoria,
+                                Nome = nomeCategoria,
+                                Descricao = descricaoCategoria
+                            };
+
+                            categoriaUI.RegistrarCategoria(novaCategoria);
+
+                            Console.WriteLine("Categoria registrada com sucesso!");
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                        }
                         break;
                     case 2:
                         Console.Write("Digite o ID da categoria que deseja alterar:");
@@ -68,10 +85,10 @@ while (!sair)
                             Console.WriteLine($"Categoria encontrada: {categoriaAlterar.Nome}");
 
                             Console.WriteLine("Digite o novo nome da categoria:");
-                            nomeCategoria = Console.ReadLine();
+                            string nomeCategoria = Console.ReadLine();
 
                             Console.WriteLine("Digite a nova descrição da categoria:");
-                            descricaoCategoria = Console.ReadLine();
+                            string  descricaoCategoria = Console.ReadLine();
 
                             // Atualiza os dados da categoria com as informações inseridas pelo usuário
                             categoriaAlterar.Nome = nomeCategoria;
@@ -150,41 +167,48 @@ while (!sair)
                 switch (opcaoProduto)
                 {
                     case 1:
-                        Console.Write("Digite o id: ");
-                        int idProduto = int.Parse(Console.ReadLine());
-                        Console.Write("Digite o nome do produto: ");
-                        string nomeProduto = Console.ReadLine();
-
-                        Console.Write("Digite a descrição do produto: ");
-                        string descricaoProduto = Console.ReadLine();
-
-                        Console.Write("Digite o preço do produto: ");
-                        double precoProduto = double.Parse(Console.ReadLine());
-
-                        Console.Write("Digite o ID da categoria do produto: ");
-                        int idCategoriaProduto = int.Parse(Console.ReadLine());
-
-                        // Verifica se a categoria existe
-                        Categoria categoriaProduto = categoriaUI.BuscarCategoriaPorId(idCategoriaProduto);
-                        if (categoriaProduto == null)
+                        try
                         {
-                            Console.WriteLine("Categoria não encontrada!");
-                        }
-                        else
-                        {
-                            // Cria um novo produto com as informações fornecidas e adiciona à lista de produtos
-                            Produto novoProduto = new Produto
+                            Console.Write("Digite o id: ");
+                             idProduto = int.Parse(Console.ReadLine());
+                            Console.Write("Digite o nome do produto: ");
+                            string nomeProduto = Console.ReadLine();
+
+                            Console.Write("Digite a descrição do produto: ");
+                            string descricaoProduto = Console.ReadLine();
+
+                            Console.Write("Digite o preço do produto: ");
+                            double precoProduto = double.Parse(Console.ReadLine());
+
+                            Console.Write("Digite o ID da categoria do produto: ");
+                            int idCategoriaProduto = int.Parse(Console.ReadLine());
+
+                            // Verifica se a categoria existe
+                            Categoria categoriaProduto = categoriaUI.BuscarCategoriaPorId(idCategoriaProduto);
+                            if (categoriaProduto == null)
                             {
-                                IdProduto = idProduto,
-                                Nome = nomeProduto,
-                                Descricao = descricaoProduto,
-                                Preco = precoProduto,
-                                Categoria = categoriaProduto
-                            };
+                                Console.WriteLine("Categoria não encontrada!");
+                            }
+                            else
+                            {
+                                // Cria um novo produto com as informações fornecidas e adiciona à lista de produtos
+                                Produto novoProduto = new Produto
+                                {
+                                    IdProduto = idProduto,
+                                    Nome = nomeProduto,
+                                    Descricao = descricaoProduto,
+                                    Preco = precoProduto,
+                                    Categoria = categoriaProduto
+                                };
 
-                            produtoUI.RegistrarProduto(novoProduto);
+                                produtoUI.RegistrarProduto(novoProduto);
 
-                            Console.WriteLine("Produto registrado com sucesso!");
+                                Console.WriteLine("Produto registrado com sucesso!");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
                         }
                         break;
                     case 2:
@@ -199,19 +223,19 @@ while (!sair)
                             Console.WriteLine($"Produto encontrado: {produtoAlterar.Nome}");
 
                             Console.WriteLine("Digite o novo nome do produto:");
-                             nomeProduto = Console.ReadLine();
+                            string  nomeProduto = Console.ReadLine();
 
                             Console.WriteLine("Digite a nova descrição do produto:");
-                             descricaoProduto = Console.ReadLine();
+                            string descricaoProduto = Console.ReadLine();
 
                             Console.WriteLine("Digite o novo preço do produto:");
-                             precoProduto = double.Parse(Console.ReadLine());
+                             double precoProduto = double.Parse(Console.ReadLine());
 
                             Console.WriteLine("Digite o ID da categoria do produto:");
-                             idCategoriaProduto = int.Parse(Console.ReadLine());
+                             int idCategoriaProduto = int.Parse(Console.ReadLine());
 
                             // Busca a categoria pelo ID informado
-                             categoriaProduto = categoriaUI.BuscarCategoriaPorId(idCategoriaProduto);
+                            Categoria categoriaProduto = categoriaUI.BuscarCategoriaPorId(idCategoriaProduto);
 
                             if (categoriaProduto != null)
                             {
@@ -246,7 +270,7 @@ while (!sair)
                         break;
                     case 4:
                         Console.Write("Informe o ID do produto: ");
-                         idProduto = int.Parse(Console.ReadLine()); 
+                          idProduto = int.Parse(Console.ReadLine()); 
 
                         Produto produtoEncontrado = produtoUI.BuscarProdutoPorId(idProduto);
 
@@ -300,19 +324,38 @@ while (!sair)
                 switch (opcaoCliente)
                 {
                     case 1:
-                        Console.Write("Digite o nome do cliente: ");
-                        string nome = Console.ReadLine();
-                        Console.Write("Digite o sobrenome do cliente: ");
-                        string sobrenome = Console.ReadLine();
-                        Console.Write("Digite o endereço do cliente: ");
-                        string endereco = Console.ReadLine();
-                        Console.Write("Digite o telefone do cliente: ");
-                        string telefone = Console.ReadLine();
-                        clienteUI.RegistrarCliente(nome, sobrenome, endereco, telefone);
+                        try
+                        {
+                            Console.Write("Digite o ID: ");
+                             idCliente = int.Parse(Console.ReadLine());
+                            Console.Write("Digite o nome do cliente: ");
+                            string nome = Console.ReadLine();
+                            Console.Write("Digite o sobrenome do cliente: ");
+                            string sobrenome = Console.ReadLine();
+                            Console.Write("Digite o endereço do cliente: ");
+                            string endereco = Console.ReadLine();
+                            Console.Write("Digite o telefone do cliente: ");
+                            string telefone = Console.ReadLine();
+
+                            Cliente novoCliente = new Cliente
+                            {
+                                IdCliente = idCliente,
+                                Nome = nome,
+                                Sobrenome = sobrenome,
+                                Endereco = endereco,
+                                Telefone = telefone
+                            };
+
+                            clienteUI.RegistrarCliente(novoCliente);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                        }
                         break;
                     case 2:
                         Console.Write("Digite o ID do cliente que deseja alterar: ");
-                        int idCliente = int.Parse(Console.ReadLine());
+                         idCliente = int.Parse(Console.ReadLine());
                         Cliente clienteExistente = clienteUI.BuscarClientePorId(idCliente);
 
                         if (clienteExistente != null)
@@ -345,7 +388,7 @@ while (!sair)
                         break;
                     case 4:
                         Console.Write("Digite o ID do cliente que deseja buscar: "); 
-                        idCliente = int.Parse(Console.ReadLine());
+                         idCliente = int.Parse(Console.ReadLine());
                         Cliente clienteEncontrado = clienteUI.BuscarClientePorId(idCliente);
 
                         if (clienteEncontrado != null)
@@ -401,43 +444,49 @@ while (!sair)
                 switch (opcaoVenda)
                 {
                     case 1:
-                        Console.WriteLine("Registrar Venda");
-
-                        // Lê o id do cliente
-                        Console.Write("Digite o ID do cliente: ");
-                        int idCliente = int.Parse(Console.ReadLine());
-
-                        // Encontra o cliente pelo seu id
-                        Cliente cliente = clienteUI.BuscarClientePorId(idCliente);
-                        if (cliente == null)
+                        try
                         {
-                            Console.WriteLine("Cliente não encontrado!");
-                            break;
+                            Console.WriteLine("Registrar Venda");
+
+                            // Lê o id do cliente
+                            Console.Write("Digite o ID do cliente: ");
+                             idCliente = int.Parse(Console.ReadLine());
+
+                            // Encontra o cliente pelo seu id
+                            Cliente cliente = clienteUI.BuscarClientePorId(idCliente);
+                            if (cliente == null)
+                            {
+                                Console.WriteLine("Cliente não encontrado!");
+                                break;
+                            }
+
+                            // Lê os ids dos produtos a serem vendidos
+                            Console.Write("Digite os IDs dos produtos a serem vendidos separados por vírgula: ");
+                            string inputProdutos = Console.ReadLine();
+                            int[] idsProdutos = inputProdutos.Split(',').Select(int.Parse).ToArray();
+
+                            // Encontra os produtos pelos seus ids
+                            List<Produto> produtosVendidos = new List<Produto>();
+                            foreach (int idProdutos in idsProdutos)
+                            {
+                                Produto produto = produtoUI.BuscarProdutoPorId(idProdutos);
+                                if (produto == null)
+                                {
+                                    Console.WriteLine($"Produto com ID {idProdutos} não encontrado!");
+                                }
+                                else
+                                {
+                                    produtosVendidos.Add(produto);
+                                }
+                            }
+
+                            // Registra a venda
+                            vendaUI.RegistrarVenda(cliente, produtosVendidos);
                         }
-
-                        // Lê os ids dos produtos a serem vendidos
-                        Console.Write("Digite os IDs dos produtos a serem vendidos separados por vírgula: ");
-                        string inputProdutos = Console.ReadLine();
-                        int[] idsProdutos = inputProdutos.Split(',').Select(int.Parse).ToArray();
-
-                        // Encontra os produtos pelos seus ids
-                        List<Produto> produtosVendidos = new List<Produto>();
-                        foreach (int idProduto in idsProdutos)
+                        catch (Exception ex)
                         {
-                            Produto produto = produtoUI.BuscarProdutoPorId(idProduto);
-                            if (produto == null)
-                            {
-                                Console.WriteLine($"Produto com ID {idProduto} não encontrado!");
-                            }
-                            else
-                            {
-                                produtosVendidos.Add(produto);
-                            }
+                            Console.WriteLine(ex.Message);
                         }
-
-                        // Registra a venda
-                        vendaUI.RegistrarVenda(cliente, produtosVendidos);
-                        
                         break;
 
                     case 2:
@@ -473,12 +522,12 @@ while (!sair)
 
                         // Encontra os novos produtos pelos seus ids
                         List<Produto> novosProdutosVendidos = new List<Produto>();
-                        foreach (int idProduto in novosIdsProdutos)
+                        foreach (int idProdutos in novosIdsProdutos)
                         {
-                            Produto novoProduto = produtoUI.BuscarProdutoPorId(idProduto);
+                            Produto novoProduto = produtoUI.BuscarProdutoPorId(idProdutos);
                             if (novoProduto == null)
                             {
-                                Console.WriteLine($"Produto com ID {idProduto} não encontrado!");
+                                Console.WriteLine($"Produto com ID {idProdutos} não encontrado!");
                             }
                             else
                             {
