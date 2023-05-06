@@ -1,5 +1,5 @@
 # Projeto de OO - E-commerce
-##Bernard Moreno, Tassi, Daniel casnova
+## Bernard Moreno, Tassi, Daniel casnova
 
 Desafio de e-commerce de roupas A sua equipe foi contratada para desenvolver um sistema de e-commerce de roupas. O sistema deve permitir aos usuários comprar roupas de diferentes tipos, tais como camisetas, calças, sapatos, entre outros. Além disso, o sistema deve oferecer descontos e promoções especiais para determinados produtos e categorias de produtos. Para implementar esse sistema, a equipe decidiu usar conceitos de herança, polimorfismo, composição e enumeradores. Cada tipo de roupa deve ser representado por uma classe, que herda as propriedades básicas de uma classe Produto. Além disso, cada tipo de roupa pode ter suas próprias propriedades e métodos específicos.
 
